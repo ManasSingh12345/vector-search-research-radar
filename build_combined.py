@@ -145,7 +145,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   <header class="top">
     <div class="brand">
       <p class="eyebrow">arXiv snapshot &middot; vector search intelligence</p>
-      <h1>Research Radar <span class="dim">/ VS</span></h1>
+      <h1>Research Radar <span class="dim">/ Vector Search</span></h1>
       <p class="sub">Recent arXiv submissions across vector search: ranked by momentum, mapped by similarity, new papers flagged.</p>
     </div>
     <div class="controls">
