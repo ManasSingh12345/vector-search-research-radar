@@ -51,6 +51,7 @@ METHOD = [
     ("sparse",   "Sparse / Lexical Hybrid",       ["sparse retrieval","splade","lexical","bm25","inverted index","learned sparse","term weighting","impact score"]),
     ("theory",   "Recall / Theory / Benchmarks",  ["recall guarantee","theoretical","provable","approximation guarantee","benchmark","lower bound","upper bound","worst-case","ann-benchmarks","performance bounds"]),
     ("system",   "Vector DB / Systems",           ["vector database","vector db","vector store","vector dbms","serving system","distributed index","sharding","scalable retrieval system","query engine","milvus","weaviate","elasticsearch","opensearch","pinecone","qdrant","database system"]),
+    ("structured","Structured Data & Tables",     ["structured data","tabular","relational","sql","table embedding","column embedding","schema","entity matching","record linkage","join","join ordering","query optimization","data integration","data lake","knowledge base completion","knowledge graph embedding","entity resolution","fuzzy join","semantic join","vector over relational","hybrid relational","structured retrieval"]),
 ]
 APP = [
     ("rag",        "RAG / LLM Retrieval",         ["retrieval-augmented","retrieval augmented","augmented generation","grounded generation","rag","llm","llms","large language model","language model","in-context","question answering","open-domain","agent","agentic","knowledge graph","generative retrieval","llm-based"]),
@@ -77,6 +78,7 @@ QUERIES = [
     'all:"vector database" OR all:"HNSW" OR all:"DiskANN" OR all:"product quantization"',
     'all:"dense retrieval" OR all:"ColBERT"',
     'all:"maximum inner product search" OR all:"graph-based ANN" OR all:"billion-scale" OR all:"vector index"',
+    'all:"structured data" OR all:"tabular" OR all:"semantic join" OR all:"fuzzy join" OR all:"table embedding"',
 ]
 
 ARXIV = "https://export.arxiv.org/api/query"
