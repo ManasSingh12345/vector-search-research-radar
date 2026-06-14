@@ -4,6 +4,8 @@ Tracks vector search research on arXiv — papers grouped by topic, ranked by 90
 
 **Live dashboard:** https://manassingh12345.github.io/vector-search-research-radar/
 
+[![Dashboard preview](https://image.thum.io/get/width/1280/crop/800/https://manassingh12345.github.io/vector-search-research-radar/)](https://manassingh12345.github.io/vector-search-research-radar/)
+
 ## Local setup
 
 ```bash
