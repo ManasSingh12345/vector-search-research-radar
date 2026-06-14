@@ -34,7 +34,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#0B0F14;--panel:#121821;--panel-2:#0F141B;--line:#1E2935;--text:#E6EDF3;--muted:#8B98A8;--muted-2:#5C6878;
-    --cyan:#3FC9DE;--amber:#F2A93B;--hot:#FF6B5B;--green:#5BD68A;
+    --cyan:#76b900;--amber:#F2A93B;--hot:#FF6B5B;--green:#5BD68A;
     --sans:'Inter',system-ui,sans-serif;--display:'Space Grotesk',var(--sans);--mono:'JetBrains Mono',ui-monospace,monospace;}
   *{box-sizing:border-box;} html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
   a{color:var(--cyan);text-decoration:none;} a:hover{text-decoration:underline;}
@@ -52,7 +52,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .ctl label{color:var(--muted-2);text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;}
   select{font-family:var(--mono);font-size:12px;color:var(--text);background:transparent;border:none;cursor:pointer;}
   select option{background:var(--panel);color:var(--text);}
-  .scan-btn{font-family:var(--display);font-weight:600;font-size:14px;color:#071017;background:linear-gradient(120deg,var(--cyan),#7be0ed);border-radius:9px;padding:11px 18px;display:flex;align-items:center;gap:9px;letter-spacing:.01em;box-shadow:0 0 0 1px rgba(63,201,222,.25);transition:transform .12s ease,filter .12s ease;}
+  .scan-btn{font-family:var(--display);font-weight:600;font-size:14px;color:#071017;background:linear-gradient(120deg,var(--cyan),#a8d400);border-radius:9px;padding:11px 18px;display:flex;align-items:center;gap:9px;letter-spacing:.01em;box-shadow:0 0 0 1px rgba(118,179,0,.25);transition:transform .12s ease,filter .12s ease;}
   .scan-btn:hover{filter:brightness(1.06);} .scan-btn:active{transform:translateY(1px);}
   .scan-btn[disabled]{filter:grayscale(.5) brightness(.7);cursor:wait;}
   .scan-btn .rdot{width:8px;height:8px;border-radius:50%;background:#071017;}
@@ -93,7 +93,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .delta{font-family:var(--mono);font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;}
   .delta.up{color:var(--hot);background:rgba(255,107,91,.12);}
   .delta.flat{color:var(--muted);background:rgba(139,152,168,.1);}
-  .delta.down{color:var(--cyan);background:rgba(63,201,222,.1);}
+  .delta.down{color:var(--cyan);background:rgba(118,179,0,.1);}
   .terms{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .track{position:relative;height:7px;border-radius:4px;background:var(--line);margin-top:9px;overflow:hidden;}
   .track .prior{position:absolute;top:0;left:0;height:100%;background:rgba(255,255,255,.07);border-radius:4px;}
@@ -223,7 +223,7 @@ function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d;}
 function within(iso,days){return new Date(iso)>=daysAgo(days);}
 function fmtDate(iso){const d=new Date(iso);return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"2-digit"});}
 function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
-function heatColor(t){const c1=[63,201,222],c2=[242,169,59],c3=[255,107,91];let a,b,f;
+function heatColor(t){const c1=[118,179,0],c2=[242,169,59],c3=[255,107,91];let a,b,f;
   if(t<0.5){a=c1;b=c2;f=t/0.5;}else{a=c2;b=c3;f=(t-0.5)/0.5;}
   const m=i=>Math.round(a[i]+(b[i]-a[i])*f);return `rgb(${m(0)},${m(1)},${m(2)})`;}
 
