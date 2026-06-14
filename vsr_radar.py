@@ -75,7 +75,7 @@ TAXONOMY = TAXONOMY + [GENERAL]   # GENERAL shown in legend but NOT scored (assi
 QUERIES = [
     'all:"vector search" OR all:"approximate nearest neighbor" OR all:"nearest neighbor search"',
     'all:"vector database" OR all:"HNSW" OR all:"DiskANN" OR all:"product quantization"',
-    'all:"dense retrieval" OR all:"retrieval augmented generation" OR all:"ColBERT"',
+    'all:"dense retrieval" OR all:"ColBERT"',
     'all:"maximum inner product search" OR all:"graph-based ANN" OR all:"billion-scale" OR all:"vector index"',
 ]
 

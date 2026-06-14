@@ -12,7 +12,7 @@ UA = "vsr-radar/1.0 (research topic tracker)"
 SEARCH = "https://arxiv.org/search/"
 PHRASES = [
     '"vector search"', '"approximate nearest neighbor"', '"nearest neighbor search"',
-    '"vector database"', '"dense retrieval"', '"retrieval augmented generation"',
+    '"vector database"', '"dense retrieval"',
     '"product quantization"', '"maximum inner product search"',
 ]
 PAGES_PER = 1          # 50 results/page

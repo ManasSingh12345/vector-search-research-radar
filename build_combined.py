@@ -163,23 +163,17 @@ TEMPLATE = r"""<!DOCTYPE html>
   <div class="view active" id="view-radar">
     <div class="statusbar">
       <div class="stat"><div class="k">Snapshot</div><div class="v" id="stLast">&mdash;</div></div>
-      <div class="stat"><div class="k">Papers in DB</div><div class="v" id="stCount">0</div></div>
-      <div class="stat"><div class="k">New this run</div><div class="v" id="stNew">0</div></div>
+      <div class="stat"><div class="k">Total Papers</div><div class="v" id="stCount">0</div></div>
       <div class="stat"><div class="k">Active topics</div><div class="v" id="stTopics">0</div></div>
-      <div class="stat"><div class="k">Top mover</div><div class="v" id="stMover" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top mover #1</div><div class="v" id="stMover1" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top mover #2</div><div class="v" id="stMover2" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top mover #3</div><div class="v" id="stMover3" style="font-size:14px;">&mdash;</div></div>
     </div>
-    <div class="grid">
-      <section>
-        <div class="col-head"><h2>Rising Topics</h2><span class="hint">ranked by <span id="winLabel">90</span>d volume &middot; &#9650; vs prior period</span></div>
-        <div class="filterrow"><input id="filter" type="text" placeholder="filter by keyword in title / abstract&hellip;" autocomplete="off"><label class="toggle"><input type="checkbox" id="newOnly"> new only</label></div>
-        <div class="clusters" id="clusters"></div>
-        <div class="empty" id="emptyClusters" style="display:none;"><div class="big">No data</div>Run the script to populate the radar.</div>
-      </section>
-      <section>
-        <div class="col-head"><h2>Newest Drops</h2><span class="hint">most recent first</span></div>
-        <div class="feed" id="feed"></div>
-        <div class="empty" id="emptyFeed" style="display:none;margin-top:0;">No papers.</div>
-      </section>
+    <div style="margin-top:22px;">
+      <div class="col-head"><h2>Rising Topics</h2><span class="hint">ranked by <span id="winLabel">90</span>d volume &middot; &#9650; vs prior period</span></div>
+      <div class="filterrow"><input id="filter" type="text" placeholder="filter by keyword in title / abstract&hellip;" autocomplete="off"></div>
+      <div class="clusters" id="clusters"></div>
+      <div class="empty" id="emptyClusters" style="display:none;"><div class="big">No data</div>Run the script to populate the radar.</div>
     </div>
   </div>
 
@@ -221,8 +215,8 @@ function heatColor(t){const c1=[118,179,0],c2=[242,169,59],c3=[255,107,91];let a
 
 /* ---------------- radar ---------------- */
 function buildClusters(){
-  const win=parseInt($("window").value,10);const filter=$("filter").value.trim().toLowerCase();const newOnly=$("newOnly").checked;
-  const pass=p=>{if(newOnly&&!newThisScan.has(p.id))return false;if(filter&&!((p.title+" "+p.abstract).toLowerCase().includes(filter)))return false;return true;};
+  const win=parseInt($("window").value,10);const filter=$("filter").value.trim().toLowerCase();
+  const pass=p=>{if(filter&&!((p.title+" "+p.abstract).toLowerCase().includes(filter)))return false;return true;};
   const map={};TAXONOMY.forEach(t=>map[t.id]={def:t,recent:[],prior:[],all:[]});
   map["_other"]={def:{id:"_other",name:"Uncategorized / Adjacent",kw:[]},recent:[],prior:[],all:[]};
   for(const p of DB){if(!pass(p))continue;const b=map[p.cluster]||map["_other"];b.all.push(p);
@@ -230,16 +224,16 @@ function buildClusters(){
   const arr=Object.values(map).filter(b=>b.all.length>0);
   arr.forEach(b=>{b.recentN=b.recent.length;b.priorN=b.prior.length;b.allN=b.all.length;b.delta=b.recentN-b.priorN;});
   arr.sort((a,b)=>b.recentN-a.recentN||b.allN-a.allN);return arr;}
-function paperRow(p){return `<div class="paper"><div class="ptitle">${newThisScan.has(p.id)?'<span class="new">NEW</span>':""}<a href="${p.link}" target="_blank" rel="noopener">${esc(p.title)}</a></div>
+function paperRow(p){return `<div class="paper"><div class="ptitle"><a href="${p.link}" target="_blank" rel="noopener">${esc(p.title)}</a></div>
   <div class="pmeta"><span>${fmtDate(p.published)}</span><span>${esc((p.authors||[]).slice(0,3).join(", "))}${p.authors&&p.authors.length>3?" +"+(p.authors.length-3):""}</span><span class="cat">${esc((p.categories||[]).slice(0,3).join(" \u00b7 "))}</span></div>
   <div class="pabs">${esc(p.abstract)}</div><div class="ptoggle">show abstract</div></div>`;}
 function renderRadar(){
   $("stLast").innerHTML=lastRefresh?`<small>${new Date(lastRefresh).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}</small>`:"&mdash;";
-  $("stCount").textContent=DB.length;$("stNew").textContent=newThisScan.size;$("winLabel").textContent=$("window").value;$("dbnote").textContent=DB.length+" papers cached";
+  $("stCount").textContent=DB.length;$("winLabel").textContent=$("window").value;$("dbnote").textContent=DB.length+" papers cached";
   const clusters=buildClusters();const maxRecent=Math.max(1,...clusters.map(c=>c.recentN));
   $("stTopics").textContent=clusters.filter(c=>c.def.id!=="_other"&&c.recentN>0).length;
-  const mover=clusters.filter(c=>c.def.id!=="_other").slice().sort((a,b)=>b.delta-a.delta)[0];
-  $("stMover").innerHTML=mover&&mover.delta>0?esc(mover.def.name)+` <small style="color:var(--hot)">\u25b2${mover.delta}</small>`:"&mdash;";
+  const movers=clusters.filter(c=>c.def.id!=="_other"&&c.delta>0).slice().sort((a,b)=>b.delta-a.delta).slice(0,3);
+  [$("stMover1"),$("stMover2"),$("stMover3")].forEach((el,i)=>{const m=movers[i];el.innerHTML=m?esc(m.def.name)+` <small style="color:var(--hot)">\u25b2${m.delta}</small>`:"&mdash;";});
   const host=$("clusters");$("emptyClusters").style.display=clusters.length?"none":"block";
   host.innerHTML=clusters.map((c,i)=>{
     const heat=c.recentN/maxRecent;const col=c.def.id==="_other"?"var(--muted-2)":heatColor(heat);
@@ -258,13 +252,9 @@ function renderRadar(){
     const tog=el.querySelector(".show-all-toggle");if(tog){const older=el.querySelector(".older-papers");tog.addEventListener("click",e=>{e.stopPropagation();const x=older.style.display==="none";older.style.display=x?"block":"none";tog.textContent=x?"- hide older papers":"+ "+older.querySelectorAll(".paper").length+" older papers";});}
   });
   host.querySelectorAll(".paper").forEach(el=>{const tg=el.querySelector(".ptoggle");if(tg)tg.addEventListener("click",e=>{e.stopPropagation();const x=el.classList.toggle("exp");tg.textContent=x?"hide abstract":"show abstract";});});
-  const feedHost=$("feed");
-  const feed=DB.slice().filter(p=>{if($("newOnly").checked&&!newThisScan.has(p.id))return false;const f=$("filter").value.trim().toLowerCase();if(f&&!((p.title+" "+p.abstract).toLowerCase().includes(f)))return false;return true;}).sort((a,b)=>b.published.localeCompare(a.published)).slice(0,30);
-  $("emptyFeed").style.display=feed.length?"none":"block";feedHost.style.display=feed.length?"flex":"none";
-  feedHost.innerHTML=feed.map(p=>{const cl=TAXMAP[p.cluster];return `<div class="fitem"><div class="ft">${newThisScan.has(p.id)?'<span class="new">NEW</span>':""}<a href="${p.link}" target="_blank" rel="noopener">${esc(p.title)}</a></div>
-    <div class="fm"><span class="dot">${fmtDate(p.published)}</span><span class="tag">${esc(cl?cl.name:"adjacent")}</span><span>${esc((p.categories||[]).slice(0,3).join(", "))}</span></div></div>`;}).join("");}
+}
 ["window"].forEach(id=>$(id).addEventListener("change",renderRadar));
-$("filter").addEventListener("input",renderRadar);$("newOnly").addEventListener("change",renderRadar);
+$("filter").addEventListener("input",renderRadar);
 
 /* ---------------- map ---------------- */
 const D=EMBEDDED.map;const cv=$("cv"),ctx=cv.getContext('2d'),tip=$("tip");
