@@ -27,6 +27,13 @@ build_combined.py      merge into tabbed dashboard   →  vsr_dashboard.html
 
 `serve.py` runs the three steps above when you click Refresh.
 
+## Data coverage
+
+This is a **keyword-filtered subset of arXiv**, not a full index. Papers are fetched by searching for these exact phrases in the title, abstract, or body:
+> "vector search", "approximate nearest neighbor", "nearest neighbor search", "vector database", "dense retrieval", "retrieval augmented generation", "product quantization", "maximum inner product search"
+
+Papers that don't use this vocabulary are missed. Each daily run fetches ~50 results per phrase (~400 papers total), sorted by submission date. arXiv has a 2–3 day processing delay, so the most recent papers visible are typically from a few days ago — this is normal.
+
 ## Notes
 
 - No API key needed. Falls back to `arxiv_scrape.py` if `export.arxiv.org` is blocked.
