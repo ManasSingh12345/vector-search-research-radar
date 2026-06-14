@@ -503,7 +503,10 @@ function render(){
     let dcls="flat",dtxt="\u00b10";
     if(c.delta>0){dcls="up";dtxt="\u25b2"+c.delta;} else if(c.delta<0){dcls="down";dtxt="\u25bc"+Math.abs(c.delta);}
     const terms=(c.def.kw||[]).slice(0,6).join(" \u00b7 ")||"no fixed keywords";
-    const papers=c.all.slice().sort((a,b)=>b.published.localeCompare(a.published)).slice(0,40);
+    const sorted=c.all.slice().sort((a,b)=>b.published.localeCompare(a.published));
+    const recentPapers=c.recent.slice().sort((a,b)=>b.published.localeCompare(a.published));
+    const olderPapers=sorted.filter(p=>!recentPapers.includes(p));
+    const showAllId=`sa${i}`;
     return `<div class="cluster" data-i="${i}">
       <button class="crow" aria-expanded="false">
         <span class="rank">${String(i+1).padStart(2,"0")}</span>
@@ -514,13 +517,18 @@ function render(){
         </span>
         <span class="cright"><span class="ccount" style="color:${col}">${c.recentN}</span><span class="csub">${c.allN} total <span class="chev">\u25b6</span></span></span>
       </button>
-      <div class="papers">${papers.map(paperRow).join("")}${c.all.length>40?`<div class="ptoggle" style="padding-top:10px">+${c.all.length-40} more in DB</div>`:""}</div>
+      <div class="papers">${recentPapers.map(paperRow).join("")}${olderPapers.length?`<div class="show-all-toggle" id="${showAllId}" style="padding:8px 0;cursor:pointer;color:var(--muted-2);font-size:12px">+ ${olderPapers.length} older papers</div><div class="older-papers" id="op${i}" style="display:none">${olderPapers.map(paperRow).join("")}</div>`:""}</div>
     </div>`;
   }).join("");
 
   host.querySelectorAll(".cluster").forEach(el=>{
     const btn=el.querySelector(".crow");
     btn.addEventListener("click",()=>{const o=el.classList.toggle("open");btn.setAttribute("aria-expanded",o?"true":"false");});
+    const tog=el.querySelector(".show-all-toggle");
+    if(tog){
+      const older=el.querySelector(".older-papers");
+      tog.addEventListener("click",e=>{e.stopPropagation();const x=older.style.display==="none";older.style.display=x?"block":"none";tog.textContent=x?"- hide older papers":"+ "+older.querySelectorAll(".paper").length+" older papers";});
+    }
   });
   host.querySelectorAll(".paper").forEach(el=>{
     const tg=el.querySelector(".ptoggle");
