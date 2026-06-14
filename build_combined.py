@@ -52,13 +52,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .ctl label{color:var(--muted-2);text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;}
   select{font-family:var(--mono);font-size:12px;color:var(--text);background:transparent;border:none;cursor:pointer;}
   select option{background:var(--panel);color:var(--text);}
-  .scan-btn{font-family:var(--display);font-weight:600;font-size:14px;color:#071017;background:linear-gradient(120deg,var(--cyan),#a8d400);border-radius:9px;padding:11px 18px;display:flex;align-items:center;gap:9px;letter-spacing:.01em;box-shadow:0 0 0 1px rgba(118,179,0,.25);transition:transform .12s ease,filter .12s ease;}
-  .scan-btn:hover{filter:brightness(1.06);} .scan-btn:active{transform:translateY(1px);}
-  .scan-btn[disabled]{filter:grayscale(.5) brightness(.7);cursor:wait;}
-  .scan-btn .rdot{width:8px;height:8px;border-radius:50%;background:#071017;}
-  .scan-btn.busy .rdot{animation:blink .9s infinite;}
   @keyframes blink{50%{opacity:.25;}}
-  .refresh-status{font-family:var(--mono);font-size:11px;color:var(--muted-2);align-self:center;}
   /* tabs */
   .tabs{display:flex;gap:4px;margin-top:20px;border-bottom:1px solid var(--line);}
   .tab{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;color:var(--muted-2);
@@ -157,8 +151,6 @@ TEMPLATE = r"""<!DOCTYPE html>
     <div class="controls">
       <div class="ctl"><label for="window">window</label>
         <select id="window"><option value="30">30d</option><option value="90" selected>90d</option><option value="180">180d</option><option value="365">365d</option></select></div>
-      <button class="scan-btn" id="refreshBtn"><span class="rdot"></span>Refresh</button>
-      <span class="refresh-status" id="refreshStatus"></span>
     </div>
   </header>
 
@@ -316,26 +308,6 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 
 renderRadar();
 
-/* ---------------- refresh (requires local server) ---------------- */
-const rb=$("refreshBtn");
-if(location.protocol==="file:"){
-  $("refreshStatus").textContent="Open via serve.py to enable Refresh";
-}
-rb.addEventListener('click',async()=>{
-  if(location.protocol==="file:"){
-    $("refreshStatus").textContent="Refresh needs the server \u2014 run: python serve.py, then use the localhost tab";
-    return;
-  }
-  rb.disabled=true;rb.classList.add('busy');$("refreshStatus").textContent="Refreshing\u2026 (this can take ~30\u201360s)";
-  try{
-    const r=await fetch('/refresh',{method:'POST'});
-    const j=await r.json();
-    if(j&&j.ok){$("refreshStatus").textContent="Updated \u2014 reloading\u2026";setTimeout(()=>location.reload(),400);}
-    else{$("refreshStatus").textContent="Refresh failed \u2014 check the server window.";rb.disabled=false;rb.classList.remove('busy');}
-  }catch(e){
-    $("refreshStatus").textContent="Refresh service not running \u2014 start serve.py.";rb.disabled=false;rb.classList.remove('busy');
-  }
-});
 </script></body></html>"""
 
 
