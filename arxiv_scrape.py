@@ -27,7 +27,7 @@ PHRASES = [
     # Structured data
     '"semantic join"', '"table embedding"', '"fuzzy join"',
 ]
-PAGES_PER = 2          # 100 results/page — look back further
+PAGES_PER = 4          # 200 results/phrase — look back further
 DELAY = 3.0
 
 def fetch_page(phrase, start):
