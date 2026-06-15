@@ -165,9 +165,9 @@ TEMPLATE = r"""<!DOCTYPE html>
       <div class="stat"><div class="k">Snapshot</div><div class="v" id="stLast">&mdash;</div></div>
       <div class="stat"><div class="k">Total Papers</div><div class="v" id="stCount">0</div></div>
       <div class="stat"><div class="k">Active topics</div><div class="v" id="stTopics">0</div></div>
-      <div class="stat"><div class="k">Top mover #1</div><div class="v" id="stMover1" style="font-size:14px;">&mdash;</div></div>
-      <div class="stat"><div class="k">Top mover #2</div><div class="v" id="stMover2" style="font-size:14px;">&mdash;</div></div>
-      <div class="stat"><div class="k">Top mover #3</div><div class="v" id="stMover3" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top topic #1</div><div class="v" id="stMover1" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top topic #2</div><div class="v" id="stMover2" style="font-size:14px;">&mdash;</div></div>
+      <div class="stat"><div class="k">Top topic #3</div><div class="v" id="stMover3" style="font-size:14px;">&mdash;</div></div>
     </div>
     <div class="grid">
       <section>
@@ -239,8 +239,8 @@ function renderRadar(){
   const win=parseInt($("window").value,10);$("stCount").textContent=DB.filter(p=>within(p.published,win)).length;$("winLabel").textContent=$("window").value;$("dbnote").textContent=DB.length+" papers cached";
   const clusters=buildClusters();const maxRecent=Math.max(1,...clusters.map(c=>c.recentN));
   $("stTopics").textContent=clusters.filter(c=>c.def.id!=="_other"&&c.recentN>0).length;
-  const movers=clusters.filter(c=>c.def.id!=="_other"&&c.delta>0).slice().sort((a,b)=>b.delta-a.delta).slice(0,3);
-  [$("stMover1"),$("stMover2"),$("stMover3")].forEach((el,i)=>{const m=movers[i];el.innerHTML=m?esc(m.def.name)+` <small style="color:var(--hot)">\u25b2${m.delta}</small>`:"&mdash;";});
+  const top3=clusters.slice(0,3);
+  [$("stMover1"),$("stMover2"),$("stMover3")].forEach((el,i)=>{const m=top3[i];el.innerHTML=m?esc(m.def.name)+` <small style="color:var(--hot)">${m.recentN} papers</small>`:"&mdash;";});
   const host=$("clusters");$("emptyClusters").style.display=clusters.length?"none":"block";
   host.innerHTML=clusters.map((c,i)=>{
     const heat=c.recentN/maxRecent;const col=c.def.id==="_other"?"var(--muted-2)":heatColor(heat);
