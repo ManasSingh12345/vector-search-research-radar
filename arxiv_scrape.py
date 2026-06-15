@@ -11,11 +11,19 @@ import vsr_radar as core
 UA = "vsr-radar/1.0 (research topic tracker)"
 SEARCH = "https://arxiv.org/search/"
 PHRASES = [
+    # Core ANN / vector search
     '"vector search"', '"approximate nearest neighbor"', '"nearest neighbor search"',
-    '"vector database"', '"vector index"', '"semantic join"', '"table embedding"', '"fuzzy join"',
-    '"product quantization"', '"maximum inner product search"',
+    '"vector database"', '"vector index"', '"maximum inner product search"',
+    '"product quantization"',
+    # CPU indexes
+    '"HNSW"', '"DiskANN"', '"FAISS"', '"ScaNN"', '"ANNOY"', '"NSG"', '"Vamana"',
+    '"NMSLIB"', '"IVF"', '"NGT"', '"FLANN"',
+    # GPU indexes
+    '"CAGRA"', '"cuVS"', '"RAFT ANN"', '"SONG"', '"GANNS"', '"HAKES"',
+    # Structured data
+    '"semantic join"', '"table embedding"', '"fuzzy join"',
 ]
-PAGES_PER = 1          # 50 results/page
+PAGES_PER = 2          # 100 results/page — look back further
 DELAY = 3.0
 
 def fetch_page(phrase, start):
