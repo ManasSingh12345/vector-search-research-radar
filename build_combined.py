@@ -236,7 +236,7 @@ function paperRow(p){return `<div class="paper"><div class="ptitle"><a href="${p
   <div class="pabs">${esc(p.abstract)}</div><div class="ptoggle">show abstract</div></div>`;}
 function renderRadar(){
   $("stLast").innerHTML=lastRefresh?`<small>${new Date(lastRefresh).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}</small>`:"&mdash;";
-  $("stCount").textContent=DB.length;$("winLabel").textContent=$("window").value;$("dbnote").textContent=DB.length+" papers cached";
+  const win=parseInt($("window").value,10);$("stCount").textContent=DB.filter(p=>within(p.published,win)).length;$("winLabel").textContent=$("window").value;$("dbnote").textContent=DB.length+" papers cached";
   const clusters=buildClusters();const maxRecent=Math.max(1,...clusters.map(c=>c.recentN));
   $("stTopics").textContent=clusters.filter(c=>c.def.id!=="_other"&&c.recentN>0).length;
   const movers=clusters.filter(c=>c.def.id!=="_other"&&c.delta>0).slice().sort((a,b)=>b.delta-a.delta).slice(0,3);
