@@ -20,6 +20,10 @@ PHRASES = [
     '"NMSLIB"', '"IVF"', '"NGT"', '"FLANN"',
     # GPU indexes
     '"CAGRA"', '"cuVS"', '"RAFT ANN"', '"SONG"', '"GANNS"', '"HAKES"',
+    # Clustering (vector-search-specific)
+    '"cluster-based ANN"', '"IVF clustering"', '"k-means quantization"',
+    '"vector clustering"', '"cluster pruning"', '"inverted file index"',
+    '"spherical k-means"', '"balanced clustering"', '"coarse quantizer"',
     # Structured data
     '"semantic join"', '"table embedding"', '"fuzzy join"',
 ]
