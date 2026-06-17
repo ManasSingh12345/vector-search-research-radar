@@ -80,6 +80,7 @@ QUERIES = [
     'all:"dense retrieval" OR all:"ColBERT"',
     'all:"maximum inner product search" OR all:"graph-based ANN" OR all:"billion-scale" OR all:"vector index"',
     'all:"structured data" OR all:"tabular" OR all:"semantic join" OR all:"fuzzy join" OR all:"table embedding"',
+    'all:"cuvs" OR all:"faiss" OR all:"lucene"',
 ]
 
 ARXIV = "https://export.arxiv.org/api/query"
