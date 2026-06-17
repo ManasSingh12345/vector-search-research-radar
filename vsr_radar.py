@@ -199,6 +199,8 @@ def save_cache(papers, last_refresh):
 # ----------------------------------------------------------------------------
 def scan(depth, selftest=False):
     prior, _last = load_cache()
+    for p in prior:
+        classify(p)   # re-classify cached papers so taxonomy changes take effect immediately
     existing = {p["id"] for p in prior}
     merged = {p["id"]: p for p in prior}
     new_ids = []
